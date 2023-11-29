@@ -1,23 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+
+import React, {useState, useEffect} from "react";
+import Pokemon from "./components/Pokemon";
+import Titulo from "./components/Titulo";
+import Footer from "./components/Footer";
+import Filtro from "./components/Filtro";
+
 
 function App() {
+  const [pokemons, setPokemons] = useState([]);
+
+  useEffect(() => {
+    fetch("https://pokeapi.co/api/v2/pokemon")
+    .then((response) => response.json())
+    .then((data) => {
+      setPokemons(data.results);
+    });
+  }, []);
+
+   const filtrarPokemons = (event) => {
+    const texto = event.target.value.toLowerCase();
+
+    if(texto === "") return limpiarFiltro();
+
+    const filtrados = pokemons.filter((pokemon) => {
+      return pokemon.name.toLowerCase().includes(texto);
+    });
+    setPokemons(filtrados);
+  };
+
+  const limpiarFiltro = () => {
+    fetch("https://pokeapi.co/api/v2/pokemon")
+    .then((response) => response.json())
+    .then((data) => {
+      setPokemons(data.results);
+    });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Titulo text="Pokedex" />
+      <Filtro filtrarPokemons={filtrarPokemons} />
+      <ul className="contenedor">
+        {
+          pokemons.map(pokemon => {
+            return <Pokemon key={pokemon.name} name={pokemon.name} url={pokemon.url} />
+          })
+        }
+      </ul>
+        <Footer author="Pedro Pacheco" year="2023" git="https://github.com/petter27" />
     </div>
   );
 }
