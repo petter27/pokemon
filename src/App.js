@@ -9,8 +9,10 @@ import Filtro from "./components/Filtro";
 function App() {
   const [pokemons, setPokemons] = useState([]);
 
+  const API_URL = "https://pokeapi.co/api/v2/pokemon";
+
   useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon")
+    fetch(API_URL)
     .then((response) => response.json())
     .then((data) => {
       setPokemons(data.results);
@@ -29,7 +31,7 @@ function App() {
   };
 
   const limpiarFiltro = () => {
-    fetch("https://pokeapi.co/api/v2/pokemon")
+    fetch(API_URL)
     .then((response) => response.json())
     .then((data) => {
       setPokemons(data.results);
